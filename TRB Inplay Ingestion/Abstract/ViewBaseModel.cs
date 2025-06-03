@@ -17,9 +17,8 @@ namespace TRB_Inplay_Ingestion.Abstract
     {
         //private string ApplicationName => "TRB Inplay Ingestion 2025";
         private string ApplicationName => "Inplay Ingestion 2025";
-        private Version Version => new Version(1, 0, 0, 1);
+        private Version Version => new Version(1, 0, 1, 2);
         public string Title => $"{ApplicationName} v{Version}";
-
 
         public ViewBaseModel() { }
 
