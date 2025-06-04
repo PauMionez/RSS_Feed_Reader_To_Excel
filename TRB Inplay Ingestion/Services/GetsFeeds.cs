@@ -107,7 +107,6 @@ namespace TRB_Inplay_Ingestion.Services
                 }
                 else if( selectedProject == "SCCL")
                 {
-                    int noAge = 0;
 
                     switch (ageOption)
                     {

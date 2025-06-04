@@ -32,12 +32,12 @@ namespace TRB_Inplay_Ingestion.Process
         //public List<ExcelModel> listExcelOutput = new List<ExcelModel>();
 
         private string outputFile = "";
-        public void ExcelOutputProcess(string sjplTemplate, string scclTemplate, string organization, List<ExcelModel> listExcelOutput)
+        public void ExcelOutputProcess(string sjplTemplate, string scclTemplate, string organization, List<ExcelModel> listExcelOutput, IProgress<double> progressbar, IProgress<string> progressStatus)
         {
             try
             {
                 List<RawDataModel> rawDataList = new List<RawDataModel>();
-                int progress = 0;
+                //int progressCounter = 0;
 
                 // Select the appropriate template
                 string selectedTemplate = organization.ToUpper() == "SJPL" ? sjplTemplate : scclTemplate;
@@ -53,11 +53,18 @@ namespace TRB_Inplay_Ingestion.Process
                     ws.Name = "Sheet1";
 
                     int counter = 3;
+                    int progressCounter = 3;
 
                     foreach (ExcelModel item in listExcelOutput)
                     {
                         //progress = (int)(((float)counter / listExcelOutput.Count) * 100d);
                         //worker.ReportProgress(progress, "Processing output data");
+
+                        //Change process
+                        double progressValue = ((double)progressCounter / listExcelOutput.Count) * 100d;
+                        progressbar.Report(progressValue);
+                        progressStatus.Report($"Processing output data...");
+                        ++progressCounter;
 
                         // Assign values using dynamic mapping
                         ws.Range[counter, columnMap["Provider Name"]].Text = item.Organization_Name;
@@ -160,6 +167,11 @@ namespace TRB_Inplay_Ingestion.Process
                     {
                         //progress = (int)(((float)csvCounter / listExcelOutput.Count) * 100d);
                         //worker.ReportProgress(progress, "Processing csv data");
+
+                        double progressValue = ((double)csvCounter / listExcelOutput.Count) * 100d;
+                        progressbar.Report(progressValue);
+                        progressStatus.Report($"Processing csv data...");
+                        ++csvCounter;
 
                         ws.Range[csvCounter, (int)CsvHeader.EventTitle].Text = item.EventTitle;
                         ws.Range[csvCounter, (int)CsvHeader.StartDate].Text = item.StartDate;

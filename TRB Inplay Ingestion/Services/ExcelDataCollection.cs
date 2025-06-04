@@ -21,13 +21,10 @@ namespace TRB_Inplay_Ingestion.Services
         
         public string ProgramVisibility = "published";
         public string ProviderVisibility = "published";
-
-
        
         //Administrative Contact 
         public string Main_phone_number = "(408) 808-2000";
 
-       
 
         //Parce the Time
         HelperConverter helperConverter = new HelperConverter();

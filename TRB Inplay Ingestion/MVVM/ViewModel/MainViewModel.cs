@@ -114,7 +114,21 @@ namespace TRB_Inplay_Ingestion.MVVM.ViewModel
 
                 string SelectedProject;
 
-                if(RSSFeedURLTypeSelectedItem == SJPLRSSFeedURL)
+                switch(RSSFeedURLTypeSelectedIndex)
+                {
+                    case 0:
+                        SelectedProject = "SJPL";
+                        break;
+                    case 1:
+                        SelectedProject = "SCCL";
+                        break;
+                    default:
+                        InformationMessage("Please Select a valid RSS Feed URL.", "Input Error");
+                        return;
+                }
+
+                /*
+                if (RSSFeedURLTypeSelectedItem == SJPLRSSFeedURL)
                 {
                     SelectedProject = "SJPL";
                 }
@@ -125,17 +139,23 @@ namespace TRB_Inplay_Ingestion.MVVM.ViewModel
                 else
                 {
                     SelectedProject = "Other";
-                }
+                }*/
 
-                Progress<double> statusProgress = new Progress<double>((value) =>
+                Progress<double> statusProgressBar = new Progress<double>((value) =>
                 {
                     ProcessBar = value;
                 });
+
+                Progress<string> statusProgressText = new Progress<string>((value) =>
+                {
+                    StatusTextReport = value;
+                });
+
                 await Task.Run(() =>
                 {
                     ProcessWorks processWorks = new ProcessWorks();
                     listExcelOutput.Clear();
-                    processWorks.ProcessRssFeeds(RSSFeedURLTypeSelectedItem, SelectedProject, listExcelOutput, statusProgress);
+                    processWorks.ProcessRssFeeds(RSSFeedURLTypeSelectedItem, SelectedProject, listExcelOutput, statusProgressBar, statusProgressText);
                 });
 
                 StatusTextReport = "Completed!";

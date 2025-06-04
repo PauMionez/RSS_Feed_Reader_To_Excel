@@ -27,7 +27,7 @@ namespace TRB_Inplay_Ingestion.Process
         /// <param name="selectedProject"></param>
         /// <param name="listExcelOutput"></param>
         /// <param name="progress"></param>
-        public void ProcessRssFeeds(string SelectedRSSFeed, string selectedProject, List<ExcelModel> listExcelOutput, IProgress<double> progress)
+        public void ProcessRssFeeds(string SelectedRSSFeed, string selectedProject, List<ExcelModel> listExcelOutput, IProgress<double> progressbar, IProgress<string> progressStatus )
         {
             try
             {
@@ -47,9 +47,10 @@ namespace TRB_Inplay_Ingestion.Process
                     XmlNode startDateNode = null;
                     XmlNode endDateNode = null;
 
-                    ////Change process
+                    //Change process stat
                     double progressValue = ((double)progressCounter / feedCount) * 100d;
-                    progress.Report(progressValue);
+                    progressbar.Report(progressValue);
+                    progressStatus.Report($"Processing {item.Title.Text}... ({progressCounter + 1}/{feedCount})");
                     ++progressCounter;
 
                     #endregion
@@ -190,7 +191,7 @@ namespace TRB_Inplay_Ingestion.Process
                     string scclTemplate = excelTemp.SCCL_XLSX_TEMP;
 
 
-                    createExcel.ExcelOutputProcess(sjplTemplate, scclTemplate, selectedProject, listExcelOutput);
+                    createExcel.ExcelOutputProcess(sjplTemplate, scclTemplate, selectedProject, listExcelOutput, progressbar, progressStatus);
 
                     #endregion
                 #endregion
